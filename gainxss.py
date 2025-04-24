@@ -4,10 +4,10 @@ import requests
 from bs4 import BeautifulSoup
 from colorama import Fore, Style, init
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import html , urllib
+
 
 init(autoreset=True)
-
-
 
 #Argument Parser
 def get_args():
@@ -15,32 +15,38 @@ def get_args():
     parser.add_argument("-url", help="Target URL (e.g: http://example.com/search?q=)", required=True)
     parser.add_argument("-p", "--payloads", help="File with XSS payloads", default="payloads.txt")
     parser.add_argument("-t", "--threads", type=int, default=50, help="Number of concurrent threads (default: 50)")
-    parser.add_argument("--param", help="Parameter name to inject payloads into, (default=q)", default="q")
     return parser.parse_args()
 
 def load_payloads(file_path):
-    with open(file_path, "r", encoding="utf-8") as f:
-        return [line.strip() for line in f if line.strip()]
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            return [line.strip() for line in f if line.strip()]
+    except FileNotFoundError:
+        print(Fore.RED + f"[!] File not found: {file_path}")
+        exit(1)
+    except PermissionError:
+        print(Fore.RED + f"[!] Permission denied: {file_path}")
+        exit(1)
 
-def inject_payload(url, param, payload):
+def inject_payload(url, payload):
     parsed_url = urlparse(url)
     query = parse_qs(parsed_url.query)
-    query[param] = payload
+    for param, value in query.items():
+        if param not in ["q", "query", "search"]:  # Add more common parameter names here
+            query[param] = payload
+            break
     new_query = urlencode(query, doseq=True)
     return urlunparse(parsed_url._replace(query=new_query))
 
-
-
 def is_reflected(response_text, payload):
-    return payload in response_text
+    return payload in response_text or html.escape(payload) in response_text or urllib.parse.quote(payload) in response_text
 
-
-def check_xss(url, payloads, param, max_workers=50):
+def check_xss(url, payloads, max_workers=50):
     vulnerable = []
     session = requests.Session()
 
     def test_payload(payload):
-        test_url = inject_payload(url, param, payload)
+        test_url = inject_payload(url, payload)
         try:
             response = session.get(test_url, timeout=5)
             if is_reflected(response.text, payload):
@@ -60,8 +66,6 @@ def check_xss(url, payloads, param, max_workers=50):
 
     return vulnerable
 
-
-
 def print_results(results):
     print("\n" + "-"*40)
     if results:
@@ -73,18 +77,12 @@ def print_results(results):
         print(Fore.GREEN + "[✓] No XSS vulnerabilities found.")
     print("-"*40)
 
-
-
-
 # Main entry
 def main():
     args = get_args()
     payloads = load_payloads(args.payloads)
-    results = check_xss(args.url, payloads, param=args.param, max_workers=args.threads)
+    results = check_xss(args.url, payloads, max_workers=args.threads)
     print_results(results)
-
-
 
 if __name__ == "__main__":
     main()
-
