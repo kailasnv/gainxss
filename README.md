@@ -1,6 +1,6 @@
-## 🔍 GainXSS — Fast & Accurate XSS Scanner for Ethical Hacking
+## 🔍 GainXSS — Fast & Accurate XSS Scanner
 
-#### currently under development
+### currently under development
 
 GainXSS is a professional-grade, multithreaded XSS scanning tool built for ethical penetration testers and bug bounty hunters. It detects reflected and DOM-based XSS vulnerabilities using smart payload injection and real browser validation.
 
@@ -39,9 +39,9 @@ You can use one of the included payload sets or your own:
 
 #### basic usage
 
-python gainxss.py -url "https://target.com/search?q=" -p payloads.txt --param q --verify-dom
+python gainxss.py -url "https://target.com/search?q=" -p payloads/payloads_optimized.txt --param q --verify-dom
 
-For help, run: python gainxss.py -h
+For help, run → python gainxss.py -h
 
 📁 Example Output
 [
@@ -54,11 +54,11 @@ For help, run: python gainxss.py -h
 
 ### ⚙️ Requirements
 
-Python 3.8+
-Playwright (for DOM validation):
+- Python
+- Playwright (for DOM validation):
 
-pip install playwright
-playwright install
+  pip install playwright
+  playwright install
 
 ### 📌 Note
 
