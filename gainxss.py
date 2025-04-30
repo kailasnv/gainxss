@@ -58,11 +58,30 @@ def inject_payload(url, param, payload, encode=False):
     new_query = urlencode(query, doseq=True)
     return urlunparse(parsed_url._replace(query=new_query))
 
-def is_reflected(response_text, payload):
-    norm_text = response_text.lower()
-    return (payload.lower() in norm_text or
-            html.escape(payload).lower() in norm_text or
-            encode_payload(payload).lower() in norm_text)
+def is_reflected_in_unsafe_context(response_text, payload):
+    soup = BeautifulSoup(response_text, "html.parser")
+    encoded = encode_payload(payload)
+    escaped = html.escape(payload)
+
+    # Check common vulnerable contexts
+    for tag in soup.find_all():
+        # Check attribute injection
+        for attr_val in tag.attrs.values():
+            if isinstance(attr_val, list):
+                if any(payload in v or escaped in v or encoded in v for v in attr_val):
+                    return True
+            elif payload in str(attr_val) or escaped in str(attr_val) or encoded in str(attr_val):
+                return True
+
+        # Check content inside script tags
+        if tag.name == "script" and payload in tag.text:
+            return True
+
+        # Check inner text of tags
+        if payload in tag.text or escaped in tag.text:
+            return True
+
+    return False
 
 def init_session(headers=None, proxy=None):
     session = requests.Session()
@@ -104,13 +123,13 @@ def check_xss(url, payloads, param, headers=None, timeout=5, proxy=None, encode=
         test_url = inject_payload(url, param, payload, encode)
         try:
             response = session.get(test_url, timeout=timeout)
-            if is_reflected(response.text, payload):
+            if is_reflected_in_unsafe_context(response.text, payload):
                 result = {"url": test_url, "payload": payload, "confirmed": False}
                 if verbose:
-                    print(Fore.GREEN + f"[+] Reflection detected: {test_url}")
+                    print(Fore.GREEN + f"[+] Reflection in unsafe context: {test_url}")
                 return result
             elif verbose:
-                print(Fore.LIGHTBLACK_EX + f"[-] Not Reflected: {test_url}")
+                print(Fore.LIGHTBLACK_EX + f"[-] Not vulnerable (safe context): {test_url}")
         except Exception as e:
             print(Fore.LIGHTBLACK_EX + f"[!] Error with payload: {payload[:30]}... -> {e}")
         return None

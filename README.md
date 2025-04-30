@@ -1,3 +1,3 @@
-###
+### Fast XSS scanner tool
 
-currently under development
+#### currently under development
