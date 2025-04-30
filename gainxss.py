@@ -1,11 +1,12 @@
 import argparse
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
-import requests, html, urllib, json
+import requests, html, urllib, json, asyncio
 from bs4 import BeautifulSoup
 from colorama import Fore, Style, init
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
+from playwright.async_api import async_playwright
 
 init(autoreset=True)
 
@@ -22,6 +23,7 @@ def get_args():
     parser.add_argument("--encode", help="Encode payloads (default: False)", action="store_true")
     parser.add_argument("--verbose", help="Enable verbose output (default: False)", action="store_true")
     parser.add_argument("--output", help="Save output to JSON file", default=None)
+    parser.add_argument("--verify-dom", help="Enable DOM-based validation using Playwright", action="store_true")
     return parser.parse_args()
 
 def load_payloads(file_path):
@@ -72,7 +74,29 @@ def init_session(headers=None, proxy=None):
     session.mount("https://", adapter)
     return session
 
-def check_xss(url, payloads, param, headers=None, timeout=5, proxy=None, encode=False, verbose=False, max_workers=50):
+async def verify_in_browser(url):
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        page = await browser.new_page()
+        try:
+            await page.goto(url, timeout=10000)
+            await asyncio.sleep(2)
+            dialog_triggered = False
+
+            async def on_dialog(dialog):
+                nonlocal dialog_triggered
+                dialog_triggered = True
+                await dialog.dismiss()
+
+            page.on("dialog", on_dialog)
+            await asyncio.sleep(1)
+            return dialog_triggered
+        except Exception as e:
+            return False
+        finally:
+            await browser.close()
+
+def check_xss(url, payloads, param, headers=None, timeout=5, proxy=None, encode=False, verbose=False, max_workers=50, verify_dom=False):
     vulnerable = []
     session = init_session(headers, proxy)
 
@@ -81,11 +105,12 @@ def check_xss(url, payloads, param, headers=None, timeout=5, proxy=None, encode=
         try:
             response = session.get(test_url, timeout=timeout)
             if is_reflected(response.text, payload):
+                result = {"url": test_url, "payload": payload, "confirmed": False}
                 if verbose:
-                    print(Fore.GREEN + f"[+] Vulnerable: {test_url}")
-                return {"url": test_url, "payload": payload}
+                    print(Fore.GREEN + f"[+] Reflection detected: {test_url}")
+                return result
             elif verbose:
-                print(Fore.LIGHTBLACK_EX + f"[-] Not Vulnerable: {test_url}")
+                print(Fore.LIGHTBLACK_EX + f"[-] Not Reflected: {test_url}")
         except Exception as e:
             print(Fore.LIGHTBLACK_EX + f"[!] Error with payload: {payload[:30]}... -> {e}")
         return None
@@ -99,6 +124,15 @@ def check_xss(url, payloads, param, headers=None, timeout=5, proxy=None, encode=
             if result:
                 vulnerable.append(result)
 
+    if verify_dom:
+        print(Fore.CYAN + "\n[+] Verifying potential XSS in browser context...\n")
+        loop = asyncio.get_event_loop()
+        for vuln in vulnerable:
+            confirmed = loop.run_until_complete(verify_in_browser(vuln["url"]))
+            vuln["confirmed"] = confirmed
+            if confirmed:
+                print(Fore.RED + f"[!] Confirmed DOM Execution: {vuln['url']}")
+
     return vulnerable
 
 def print_results(results):
@@ -107,7 +141,8 @@ def print_results(results):
         print(Fore.RED + "[!] XSS Vulnerabilities Found:\n")
         for item in results:
             print(Fore.YELLOW + f"URL: {item['url']}")
-            print(Fore.GREEN + f"Payload: {item['payload']}\n")
+            print(Fore.GREEN + f"Payload: {item['payload']}")
+            print(Fore.RED + f"Confirmed: {item['confirmed']}\n")
     else:
         print(Fore.GREEN + "[✓] No XSS vulnerabilities found.")
     print("-"*40)
@@ -133,7 +168,8 @@ def main():
         proxy=args.proxy,
         encode=args.encode,
         verbose=args.verbose,
-        max_workers=args.threads
+        max_workers=args.threads,
+        verify_dom=args.verify_dom
     )
     print_results(results)
     if args.output:
