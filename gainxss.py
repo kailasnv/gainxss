@@ -10,11 +10,13 @@ from playwright.async_api import async_playwright
 
 init(autoreset=True)
 
+loop = asyncio.get_event_loop()
+
 # Argument Parser
 def get_args():
     parser = argparse.ArgumentParser(description="GainXSS - Fast XSS Scanner")
     parser.add_argument("-url", help="Target URL (e.g: http://example.com/search?q=)", required=True)
-    parser.add_argument("-p", "--payloads", help="File with XSS payloads", default="payloads/payloads_optimized.txt")
+    parser.add_argument("-p", "--payloads", help="File with XSS payloads", default="payloads/payloads.txt")
     parser.add_argument("-t", "--threads", type=int, default=50, help="Number of concurrent threads (default: 50)")
     parser.add_argument("--param", help="Parameter name to inject payloads into (default: q)", default="q")
     parser.add_argument("--headers", help="File with custom headers", default=None)
@@ -145,7 +147,14 @@ def check_xss(url, payloads, param, headers=None, timeout=5, proxy=None, encode=
 
     if verify_dom:
         print(Fore.CYAN + "\n[+] Verifying potential XSS in browser context...\n")
-        loop = asyncio.get_event_loop()
+
+        try:
+            loop = asyncio.get_event_loop()            
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+        # end try
+
         for vuln in vulnerable:
             confirmed = loop.run_until_complete(verify_in_browser(vuln["url"]))
             vuln["confirmed"] = confirmed
