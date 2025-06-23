@@ -1,10 +1,10 @@
-## 🔍 GainXSS — Fast & Accurate XSS Scanner
+## GainXSS — Fast & Accurate XSS Scanner
 
 ### currently under development
 
 GainXSS is a professional-grade, multithreaded XSS scanning tool built for ethical penetration testers and bug bounty hunters. It detects reflected and DOM-based XSS vulnerabilities using smart payload injection and real browser validation.
 
-#### 🚀 Features
+#### Features
 
 ✅ Multi-threaded scanner for fast payload injection (ThreadPoolExecutor)
 
@@ -20,28 +20,11 @@ GainXSS is a professional-grade, multithreaded XSS scanning tool built for ethic
 
 ✅ Clean, color-coded CLI interface using colorama
 
-#### 🎯 Use Cases
-
-- Ethical hacking & web app pentesting
-- Red team toolkits and recon automation
-- Bypassing WAF filters and JS sanitizers
-- Testing SVG/image/profile upload vectors
-- DOM-based validation for real exploitability
-
-#### Payload Support
-
-You can use one of the included payload sets or your own:
-
-    - payloads_optimized.txt → Clean, effective XSS payloads
-    - payloads_waf_bypass.txt → Obfuscated payloads to bypass filters
-    - payloads_svg_only.txt → XSS via <svg> contexts
-    - payloads_tagless_event.txt → Payloads using only attributes/events
-
 #### basic usage
 
-    python gainxss.py -url "https://target.com/search?q=" -p payloads/payloads_optimized.txt --param q --verify-dom
+    python gainxss.py -url "https://target.com/search?q=test" --verbose
 
-    python gainxss.py -url "http://target.com/page?q=" -p payloads/payloads_optimized.txt -t 100 --verbose --param q --verify-dom --output result.json
+    python gainxss.py -url "http://target.com/page?q=test" -p /path/to/payload.txt -t 100 --verbose --param q --verify-dom --output result.json
 
 for more info run
 
