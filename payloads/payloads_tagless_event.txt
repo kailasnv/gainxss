@@ -1,5 +1,0 @@
-" onmouseover=alert(1) x="
-' onclick=alert(1) '
-" accesskey=a onclick=alert(1) x="
-javascript:alert(1)
-data:text/html,<script>alert(1)</script>
