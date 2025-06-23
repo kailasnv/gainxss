@@ -5,6 +5,7 @@
 GainXSS is a professional-grade, multithreaded XSS scanning tool built for ethical penetration testers and bug bounty hunters. It detects reflected and DOM-based XSS vulnerabilities using smart payload injection and real browser validation.
 
 #### 🚀 Features
+
 ✅ Multi-threaded scanner for fast payload injection (ThreadPoolExecutor)
 
 ✅ Supports custom payload files, including: waf_bypass, svg_only, tagless_event
@@ -20,6 +21,7 @@ GainXSS is a professional-grade, multithreaded XSS scanning tool built for ethic
 ✅ Clean, color-coded CLI interface using colorama
 
 #### 🎯 Use Cases
+
 - Ethical hacking & web app pentesting
 - Red team toolkits and recon automation
 - Bypassing WAF filters and JS sanitizers
@@ -27,6 +29,7 @@ GainXSS is a professional-grade, multithreaded XSS scanning tool built for ethic
 - DOM-based validation for real exploitability
 
 #### Payload Support
+
 You can use one of the included payload sets or your own:
 
     - payloads_optimized.txt → Clean, effective XSS payloads
@@ -35,6 +38,7 @@ You can use one of the included payload sets or your own:
     - payloads_tagless_event.txt → Payloads using only attributes/events
 
 #### basic usage
+
     python gainxss.py -url "https://target.com/search?q=" -p payloads/payloads_optimized.txt --param q --verify-dom
 
     python gainxss.py -url "http://target.com/page?q=" -p payloads/payloads_optimized.txt -t 100 --verbose --param q --verify-dom --output result.json
@@ -44,6 +48,7 @@ for more info run
     python gainxss.py -h
 
 #### Example Output
+
     [
     {
     "url": "https://target.com/search?q=<svg onload=alert(1)>",
@@ -53,8 +58,17 @@ for more info run
     ]
 
 #### ⚙️ Requirements
-    - Python
-    - Playwright
 
-### 📌 Note
+To install necessary python packages
+
+        pip install -r requirments.txt
+
+if you need to create your python virtual environment
+
+        python -m venv myenv
+        source myenv/bin/activate
+        pip install -r requirments.txt
+
+### Note
+
 This tool is for authorized security testing only. Do not use it against systems without permission.
